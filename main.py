@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 app=FastAPI()
 
@@ -33,3 +33,13 @@ async def root():
 @app.get('/users')
 async def get_users():
     return users_db
+
+
+# single user fetch
+@app.get("/users/{user_age}")
+async def get_user(user_age: int):
+    for user in users_db:
+        if user["age"] == user_age:
+            return user
+        raise HTTPException(status_code=404, detail="User not found")
+      
